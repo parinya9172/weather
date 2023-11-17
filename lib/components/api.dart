@@ -46,27 +46,29 @@ class Api {
       final uri = Uri.parse('https://api.openweathermap.org/data/2.5/weather' +
           '?lat=$latitude&lon=$longitude&appid=8b06f7a92d32f24e637b47f97a25ca06');
 
-      final response = await http.get(uri);
+      // final response = await http.get(uri);
 
-      // final response = await dio.get(
-      //   'https://api.openweathermap.org/data/2.5/weather',
-      //   options: Options(
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'Accept': 'application/json',
-      //     },
-      //   ),
-      //   queryParameters: {
-      //     'lat': latitude,
-      //     'lon': longitude,
-      //     'appid': '8b06f7a92d32f24e637b47f97a25ca06',
-      //   },
-      // );
+      final response = await dio.get(
+        'https://api.openweathermap.org/data/2.5/weather',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+        queryParameters: {
+          'lat': latitude,
+          'lon': longitude,
+          'appid': '8b06f7a92d32f24e637b47f97a25ca06',
+        },
+      );
 
       logInfo('2222: $response');
-      var data = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      // var data = jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      // logInfo('data: $data');
 
-      final weather = ResponseWeather.fromJson(data);
+      final weather = ResponseWeather.fromJson(response.data);
+      // final weather = ResponseWeather.fromJson(data);
 
       final temperatureInFahrenheit = weather.main.temp;
       final temperatureInCelsius = (temperatureInFahrenheit - 32) / 5 ~/ 9;
@@ -74,7 +76,7 @@ class Api {
         temperatureInCelsius: 25, //temperatureInCelsius,
         dateTime: DateTime.now(),
       );
-    } catch (error) {
+    } catch (error) {;
       print('error = $error');
       rethrow;
     }
